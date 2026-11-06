@@ -35,7 +35,7 @@ jobs:
             - name: build
               run: npm run build
             - name: analyze the codeql
-              uses: github/codeql-action/analyze@v4 
+              uses: github/codeql-action/analyze@v4
             - name: publish test results
               if: always()
               uses: EnricoMi/publish-unit-test-result-action@v2
