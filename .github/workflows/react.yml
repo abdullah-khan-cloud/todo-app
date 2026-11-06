@@ -1,0 +1,27 @@
+---
+name: react app build
+
+on:
+     pull_request: 
+        branches: 
+            -  main
+
+jobs: 
+      build:
+         runs-on: ubuntu-latest
+         steps:
+            - name: retrieving code
+              uses: actions/checkout@v4
+            - name: resolving Dependencies
+              run: npm install
+            - name: Run Tests
+              run: npm run test -- --run --reporter=junit --outputFile=TestResults/test-results.xml
+            - name: build
+              run: npm run build
+            - name: publish test results
+              uses: EnricoMi/publish-unit-test-result-action@v2
+              with: 
+                 files: "**/TestResults/test-results.xml"
+                 comment_mode: always
+             
+            
