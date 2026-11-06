@@ -5,6 +5,12 @@ on:
      pull_request: 
         branches: 
             -  main
+          
+permissions:
+     security-events: write
+     contents: read
+     pull-requests: write
+     checks: write
 
 jobs: 
       build:
@@ -12,13 +18,26 @@ jobs:
          steps:
             - name: retrieving code
               uses: actions/checkout@v4
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+            - name: initializing CodeQl
+              uses: github/codeql-action/init@v4
+              with:
+                languages: javascript-typescript
             - name: resolving Dependencies
               run: npm install
+            - name: Create test reports directory
+              run: mkdir -p TestResults
             - name: Run Tests
               run: npm run test -- --run --reporter=junit --outputFile=TestResults/test-results.xml
             - name: build
               run: npm run build
+            - name: analyze the codeql
+              uses: github/codeql-action/analyze@v4
             - name: publish test results
+              if: always()
               uses: EnricoMi/publish-unit-test-result-action@v2
               with: 
                  files: "**/TestResults/test-results.xml"
