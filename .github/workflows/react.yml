@@ -28,6 +28,8 @@ jobs:
                 languages: javascript-typescript
             - name: resolving Dependencies
               run: npm install
+            - name: Create test reports directory
+              run: mkdir -p TestResults
             - name: Run Tests
               run: npm run test -- --run --reporter=junit --outputFile=TestResults/test-results.xml
             - name: build
